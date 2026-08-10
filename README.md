@@ -10,4 +10,4 @@ The dir 'DictionaryData' has all the txt files but they're all empty. You're gon
 
 When you run it, it will create a dir and files.
 
-*Try to figure how to read my code. I honestly don't remember why I wrote it the way I did, It comes to me in a vision then god takes over and writes the solution.*
+*Try to figure what my code does. I honestly don't remember why I wrote it the way I did, It comes to me in a vision then god takes over and writes the solution.*
