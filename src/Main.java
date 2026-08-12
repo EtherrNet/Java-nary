@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class Main {
 
+    static int fuckass = 69;
 
     public static void main (String[] args ) throws IOException {
 
@@ -10,6 +11,7 @@ public class Main {
         //Var
         Scanner strInput = new Scanner(System.in);
         String clientInput;
+
 
 
         //Program starts here

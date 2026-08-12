@@ -150,8 +150,14 @@ public class File_Handling {
 
         //Word search algorithm
         while ((lineFromFile = reader.readLine()) !=null) {
+            // DO NOT DELETE THESE TWO
+            //These reset the counters for the next pass,
+             likelyWordCounter = 0;
 
-            //Ignores Blank or special lines
+             notLikelyWordCounter = 0;
+
+
+             //Ignores Blank or special lines
             if (lineFromFile.isBlank() || lineFromFile.contains("/")){
                 continue;
             }
