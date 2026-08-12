@@ -101,13 +101,14 @@ public class File_Handling {
 
     public static char FindFile (char selectedSection){
 
-
         if (filesListed != null){
-
+            //Looks within the DictionaryData dir for the file.
             for (int i =0; i < filesListed.length; i++){
 
                 String a = String.valueOf(filesListed[i]);
+
                 int index = a.indexOf(fileSeparator);
+
 
 
                 if (a.charAt(index+1) == selectedSection && a.charAt(index+2) == '.'){
@@ -117,24 +118,19 @@ public class File_Handling {
                     PrintFuncs.Verbose("Returned char is : " +returnChar );
                     return returnChar;
                 }
-
-
             }
-
             PrintFuncs.SysVerbose("Warning: Section file was not found.");
         } else {
             PrintFuncs.SysVerbose("Warning: Directory is empty");
         }
         return '!';
-
-
     }
 
     public static String WordCheck (String clients_Word, char SelectedSectionChar) throws IOException {
         //Vars
-        float similarWordLengthPercentMin = 0.5F;
+        float similarWordLengthPercentMin = 0.5F; //Increasing this, will cause the algorithm to check unlikely words more often.
 
-        float similarWordLengthPercentMax = 1.5F;
+        float similarWordLengthPercentMax = 1.5F; //Decreasing will cause the algorithm to check unlikely words more often.
 
         int likelyWordCounter = 0;
 
@@ -171,6 +167,7 @@ public class File_Handling {
 
             // Compares the literal words
             {
+                //We narrow down words within a range-of-error user-word size scope.
                 if (wordFromRecordLength > clients_Word.length() || similarWordLength < similarWordLengthPercentMin || similarWordLength > similarWordLengthPercentMax) {
                     PrintFuncs.Verbose("NO | "+wordFromRecord.toUpperCase());
                     continue;
@@ -184,6 +181,8 @@ public class File_Handling {
 
             //Compares user word to likely word
             {
+                //If we find a likely word, we check every Char.
+                //With checking every Char, if the likely word shares a lot of the same Chars as the user-word, we increment 'likelyWordCounter' and vise versa.
                 for (int s = 1; s < wordFromRecordLength; ++s){
 
                     // Compares just Chars
@@ -197,6 +196,8 @@ public class File_Handling {
             }
 
             //Final decision call
+            //If we didn't find the actually word, we give the user a best-off solution.
+            //This is based on the 'likelyWordCounter'.
             {
                 if (likelyWordCounter > notLikelyWordCounter){
                     PrintFuncs.SysVerbose("MAYBE | "+wordFromRecord.toUpperCase());

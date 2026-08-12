@@ -1,5 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -16,7 +14,7 @@ public class Main {
 
         //Program starts here
         if (File_Handling.Bootstrap()){
-            TitleText();
+            PrintFuncs.SysVerbose("\nJavanary\nFree Dictionary Application\n");
             while (Program_Info.PROGRAM_STATE){
 
                 clientInput = strInput.nextLine();
@@ -25,15 +23,6 @@ public class Main {
 
             }
         }
-
-
-        {
-            //Test functions block
-
-        }
-
-
-
     }
 
     //Class Functions
@@ -56,9 +45,4 @@ public class Main {
         return '!';
 
     }
-
-    public static void TitleText (){
-        PrintFuncs.SysVerbose("\nJavanary\nFree Dictionary Application\n");
-    }
-
 }

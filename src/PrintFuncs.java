@@ -13,7 +13,7 @@ public class PrintFuncs {
         }
 
     }
-    static  public  void Warning(String WarningText){
+    static public void Warning(String WarningText){
 
         String textToAppend = "WARNING: ";
         System.out.println(textToAppend + WarningText);
