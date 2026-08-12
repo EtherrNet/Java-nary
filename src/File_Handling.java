@@ -77,18 +77,16 @@ public class File_Handling {
 
     public static void DisplayWordRecord(String lineFromFile)  {
 
-        int LineNumber = 1;
-
-        {
-            PrintFuncs.Verbose("You're accessing the");
+        if (lineFromFile == null){
+            return;
         }
 
-
-
             { //Displays where the record is store
-                PrintFuncs.Verbose("Record data:"+lineFromFile);
-                PrintFuncs.Verbose("Record is at line "+LineNumber+"\n");
+                PrintFuncs.Verbose("Raw record data:"+lineFromFile);
+
             }
+
+
 
             String Word = (String) lineFromFile.subSequence(1,lineFromFile.lastIndexOf("]"));
             System.out.println(Word);
@@ -132,23 +130,24 @@ public class File_Handling {
 
     }
 
-    public static void WordCheck (String clients_Word, char SelectedSectionChar) throws IOException {
-        //start measuring execution time
-        TimeToExecute.startTime = System.nanoTime();
+    public static String WordCheck (String clients_Word, char SelectedSectionChar) throws IOException {
         //Vars
-        float similarWordLengthPercentMin = 50;
-        similarWordLengthPercentMin = similarWordLengthPercentMin /100;
+        float similarWordLengthPercentMin = 0.5F;
+
         float similarWordLengthPercentMax = 1.5F;
 
-        boolean found_a_solution =false;
+        int likelyWordCounter = 0;
 
+        int notLikelyWordCounter = 0;
+
+        boolean found_a_solution =false;
 
 
         //Creating the reader
         BufferedReader reader = new BufferedReader(new FileReader(("DictionaryData\\"+SelectedSectionChar+".txt")));
         String lineFromFile;
 
-        {   //Prints which section file is being access
+        {   //Prints which section file is being access, debug info
             PrintFuncs.Verbose("You're accessing the '"+SelectedSectionChar+".txt'");
         }
 
@@ -156,16 +155,14 @@ public class File_Handling {
         //Word search algorithm
         while ((lineFromFile = reader.readLine()) !=null) {
 
-            int likelyWordCounter = 0;
-            int notLikelyWordCounter = 0;
-
-            //Ignores Blank-lines or special lines
+            //Ignores Blank or special lines
             if (lineFromFile.isBlank() || lineFromFile.contains("/")){
                 continue;
             }
 
-            //Paring record to obtain word
+            //Parses the record to obtain the word
             String wordFromRecord = (String) lineFromFile.subSequence(1,lineFromFile.lastIndexOf("]"));
+
             int wordFromRecordLength = wordFromRecord.length();
 
             float similarWordLength = (float) wordFromRecordLength /clients_Word.length();
@@ -181,31 +178,35 @@ public class File_Handling {
 
                 if (clients_Word.equalsIgnoreCase(wordFromRecord)){
                     System.out.println("YES | "+wordFromRecord.toUpperCase() );
-                    found_a_solution = true;
-                    TimeToExecute.TimeToExecute();
-                    File_Handling.DisplayWordRecord(lineFromFile);
-                    break;
+                    return lineFromFile;
                 }
             }
 
             //Compares user word to likely word
-            for (int s = 1; s < wordFromRecordLength; ++s){
+            {
+                for (int s = 1; s < wordFromRecordLength; ++s){
 
+                    // Compares just Chars
+                    if (clients_Word.charAt(s) == wordFromRecord.charAt(s)){
+                        likelyWordCounter++;
+                    } else {
+                        notLikelyWordCounter++;
 
-                // Compares just Chars
-                if (clients_Word.charAt(s) == wordFromRecord.charAt(s)){
-                    likelyWordCounter++;
-                   // PrintFuncs.Verbose(("Likely counter num "+likelyWordCounter));
-                    //PrintFuncs.Verbose("Likely chance that "+"'"+wordFromRecord+"'"+" is the word: "+(float) likelyWordCounter/wordFromRecord.length());
-                } else {
-                    notLikelyWordCounter++;
-                    //PrintFuncs.Verbose(("Not likely counter num "+notLikelyWordCounter));
-                    //PrintFuncs.Verbose("Unlikely chance that "+"'"+wordFromRecord+"'"+" is the word: "+(float) notLikelyWordCounter/wordFromRecord.length());
-
+                    }
                 }
-
-
             }
+
+            //Final decision call
+            {
+                if (likelyWordCounter > notLikelyWordCounter){
+                    PrintFuncs.SysVerbose("MAYBE | "+wordFromRecord.toUpperCase());
+                    found_a_solution =true;
+                } else {
+                    PrintFuncs.Verbose("NO | "+wordFromRecord.toUpperCase());
+                }
+            }
+
+
 
             {   //Debug info
                 PrintFuncs.Verbose(("Total Likely counter num "+likelyWordCounter));
@@ -215,23 +216,15 @@ public class File_Handling {
                 PrintFuncs.Verbose("");
             }
 
-            //Final decision call
-            if (likelyWordCounter > notLikelyWordCounter){
-                PrintFuncs.SysVerbose("MAYBE | "+wordFromRecord.toUpperCase());
-                found_a_solution =true;
-                TimeToExecute.endTime = System.nanoTime();
-                TimeToExecute.TimeToExecute();
-            } else {
-                PrintFuncs.Verbose("NO | "+wordFromRecord.toUpperCase());
-            }
+
 
         }
 
         reader.close();
 
-        //If it couldn't find a solution
+        //If it couldn't find a solution, defaults to error message
         if (!found_a_solution){
-            PrintFuncs.Verbose("Could not find ["+clients_Word + "].");
+            PrintFuncs.SysVerbose("Could not find ["+clients_Word + "].");
             PrintFuncs.Verbose("If it is a word, please add to "+SelectedSectionChar+".txt in '"+File_Handling.directoryName.getName()+"' directory.");
             PrintFuncs.Verbose("Located at: "+(File_Handling.directoryName.getAbsolutePath()));
         }
@@ -240,7 +233,7 @@ public class File_Handling {
 
 
 
-
+        return null;
     }
 
     public static void WriteToFile (String fileToBeWriten) throws IOException {

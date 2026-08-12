@@ -31,6 +31,7 @@ public class Commands {
 
 
     }
+
     private static void DictionaryFunc (Scanner strInput) throws IOException {
         //The word finder
         String clientInput;
@@ -49,8 +50,13 @@ public class Commands {
 
 
         if (fileSelectedChar != '!') {
-            File_Handling.WordCheck(clientInput, fileSelectedChar);
+            TimeToExecute.startTime = System.nanoTime();
+            String lineFromFile = File_Handling.WordCheck(clientInput, fileSelectedChar);
+            TimeToExecute.TimeToExecute();
+            File_Handling.DisplayWordRecord(lineFromFile);
         }
+
+
     }
 
     private static boolean DashCommands (String userInput){
