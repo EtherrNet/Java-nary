@@ -1,5 +1,6 @@
 public class PrintFuncs {
 
+    //Custom print functions for my needs. I hope the names explains themselves
 
     static public void SysVerbose(String SysVerboseText){
         if (Program_Info.SysVerbose){

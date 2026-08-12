@@ -69,7 +69,9 @@ public class Commands {
             return;
         }
 
+        //Measuring Time
         TimeToExecute.startTime = System.nanoTime();
+
         //Finds the word within the text file
         String lineFromFile = File_Handling.WordCheck(clientInput, fileSelectedChar);
         TimeToExecute.TimeToFinish();

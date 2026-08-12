@@ -88,13 +88,13 @@ public class File_Handling {
 
 
 
-            String Word = (String) lineFromFile.subSequence(1,lineFromFile.lastIndexOf("]"));
+            String Word = lineFromFile.substring(1,lineFromFile.lastIndexOf("]"));
             System.out.println(Word);
 
-            String Speech = (String) lineFromFile.subSequence(lineFromFile.indexOf('{')+1, lineFromFile.lastIndexOf('}'));
+            String Speech = lineFromFile.substring(lineFromFile.indexOf('{')+1, lineFromFile.lastIndexOf('}'));
             System.out.println(Speech);
 
-            String Definition = (String) lineFromFile.subSequence(lineFromFile.indexOf('"')+1,lineFromFile.lastIndexOf('"'));
+            String Definition = lineFromFile.substring(lineFromFile.indexOf('"')+1,lineFromFile.lastIndexOf('"'));
             System.out.println(Definition+"\n");
 
     }
@@ -128,9 +128,9 @@ public class File_Handling {
 
     public static String WordCheck (String clients_Word, char SelectedSectionChar) throws IOException {
         //Vars
-        float similarWordLengthPercentMin = 0.5F; //Increasing this, will cause the algorithm to check unlikely words more often.
+        float similarWordLengthPercentMin = 0.75F; //Increasing this, will cause the algorithm to skip unlikely words more often.
 
-        float similarWordLengthPercentMax = 1.5F; //Decreasing will cause the algorithm to check unlikely words more often.
+        float similarWordLengthPercentMax = 1.25F; //Decreasing will cause the algorithm to skip unlikely words more often.
 
         int likelyWordCounter = 0;
 
@@ -163,7 +163,7 @@ public class File_Handling {
             }
 
             //Parses the record to obtain the word
-            String wordFromRecord = (String) lineFromFile.subSequence(1,lineFromFile.lastIndexOf("]"));
+            String wordFromRecord =  lineFromFile.substring(1,lineFromFile.lastIndexOf("]"));
 
             int wordFromRecordLength = wordFromRecord.length();
 
@@ -173,14 +173,15 @@ public class File_Handling {
 
             // Compares the literal words
             {
-                //We narrow down words within a range-of-error user-word size scope.
+                //We only want to check words of a similar length, we skip outliers .
                 if (wordFromRecordLength > clients_Word.length() || similarWordLength < similarWordLengthPercentMin || similarWordLength > similarWordLengthPercentMax) {
                     PrintFuncs.Verbose("NO | "+wordFromRecord.toUpperCase());
                     continue;
                 }
 
                 if (clients_Word.equalsIgnoreCase(wordFromRecord)){
-                    System.out.println("YES | "+wordFromRecord.toUpperCase() );
+                    PrintFuncs.Verbose("YES | "+wordFromRecord.toUpperCase() );
+                    reader.close();
                     return lineFromFile;
                 }
             }
