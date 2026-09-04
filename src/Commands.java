@@ -11,10 +11,11 @@ public class Commands {
     //As to which functions does the user want to invoke.
     public static void CommandList (String userInput) throws IOException {
 
+        //As Methods can only take 1 input, the creation of another input will be for 'DictionaryFunc'
         Scanner strInput = new Scanner(System.in);
 
 
-        //Dictionary Search
+
         if (userInput.isBlank()) {
             //when the user needs help it will display some help :)
             System.out.println("For help: '?' or 'help'");
@@ -42,14 +43,14 @@ public class Commands {
     private static void DictionaryFunc (Scanner strInput) throws IOException {
 
         String clientInput;
-
+        //The client word to be searched.
         clientInput = strInput.nextLine();
 
         char fileSelectedChar;
 
 
         //Checks to see if user throws an invalid input
-        char selectedChar = Main.SectionLetterCheck(clientInput);
+        char selectedChar = SectionLetterCheck(clientInput);
 
         if (selectedChar == '!') {
             PrintFuncs.Error("Bad input!!!");
@@ -99,4 +100,26 @@ public class Commands {
 
 
     }
+
+    //We check if the first letter of the client's word is a valid character.
+    public static char SectionLetterCheck (String intialWord){
+
+        intialWord = intialWord.toLowerCase();
+
+        if (!intialWord.isBlank() && !(intialWord.length() == 1)){
+            for (int i  = 0; i < Program_Info.letterArray.length; ++i){
+
+                if (intialWord.charAt(0) == Program_Info.letterArray[i]){
+                    PrintFuncs.Verbose("Word belongs to the '"+Program_Info.letterArray[i]+"' section");
+                    return Program_Info.letterArray[i];
+                }
+
+            }
+        }
+
+        return '!';
+
+    }
 }
+
+

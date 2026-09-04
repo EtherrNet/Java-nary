@@ -9,7 +9,7 @@ public class File_Handling {
     static String fileSeparator = FileSystems.getDefault().getSeparator();
 
 
-
+    // Essentially this method makes sure that the program has all what it needs before running.
     public static boolean Bootstrap() throws IOException {
 
         PrintFuncs.SysVerbose("Performing System Checks.");
@@ -75,30 +75,29 @@ public class File_Handling {
         return true;
     }
 
+    //Parses the record into a human-readable structure.
     public static void DisplayWordRecord(String lineFromFile)  {
 
         if (lineFromFile == null){
             return;
         }
-
             { //Displays where the record is store
                 PrintFuncs.Verbose("Raw record data:"+lineFromFile);
 
             }
 
-
-
             String Word = lineFromFile.substring(1,lineFromFile.lastIndexOf("]"));
-            System.out.println(Word);
+            PrintFuncs.SysVerbose(Word);
 
             String Speech = lineFromFile.substring(lineFromFile.indexOf('{')+1, lineFromFile.lastIndexOf('}'));
-            System.out.println(Speech);
+            PrintFuncs.SysVerbose(Speech);
 
             String Definition = lineFromFile.substring(lineFromFile.indexOf('"')+1,lineFromFile.lastIndexOf('"'));
-            System.out.println(Definition+"\n");
+            PrintFuncs.SysVerbose(Definition+"\n");
 
     }
 
+    // Checks the current dir, where the program lies, looking for certain files.
     public static char FindFile (char selectedSection){
 
         if (filesListed != null){
@@ -126,6 +125,7 @@ public class File_Handling {
         return '!';
     }
 
+    // This method reads a file looking for a word.
     public static String WordCheck (String clients_Word, char SelectedSectionChar) throws IOException {
         //Vars
         float similarWordLengthPercentMin = 0.75F; //Increasing this, will cause the algorithm to skip unlikely words more often.
@@ -158,6 +158,7 @@ public class File_Handling {
 
 
              //Ignores Blank or special lines
+            //TODO rewrite so it pass every non alphabet character
             if (lineFromFile.isBlank() || lineFromFile.contains("/")){
                 continue;
             }
@@ -189,7 +190,8 @@ public class File_Handling {
             //Compares user word to likely word
             {
                 //If we find a likely word, we check every Char.
-                //With checking every Char, if the likely word shares a lot of the same Chars as the user-word, we increment 'likelyWordCounter' and vise versa.
+                //With checking every Char, if the likely word shares a lot of the same Chars as the user-word,-
+                // we increment 'likelyWordCounter' and vise versa.
                 for (int s = 1; s < wordFromRecordLength; ++s){
 
                     // Compares just Chars
@@ -244,13 +246,17 @@ public class File_Handling {
         return null;
     }
 
+    // This would write something to a section file.
     public static void WriteToFile (String fileToBeWriten) throws IOException {
 
         BufferedWriter bWriter = new BufferedWriter(new FileWriter(fileToBeWriten));
-
+        bWriter.newLine();
+        bWriter.write("test");
+        bWriter.close();
 
     }
-    public static void fileReader (){
+    // This method would read something, idk.
+    public static void FileReader (){
 
     }
 }
